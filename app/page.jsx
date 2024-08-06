@@ -1,33 +1,31 @@
 'use client'
 import { useState, useEffect } from "react";
-import { getUsers } from "./utils/firebase/firestoreFunctions";
+import { getUser } from "./utils/firebase/firestoreFunctions";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState();
 
-  const getProfiles = async () => {
-    const querySnapshot = await getUsers();
-    // onGetLinks((querySnapshot) => {
-    const docs = [];
-    querySnapshot.forEach((doc) => {
+  const getUserProfile = async () => {
+    const querySnapshot = await getUser('hardikchhabra3003@gmail.com');
+    /* querySnapshot.forEach((doc) => {
       docs.push({ ...doc.data(), id: doc.id });
-    });
-    setUsers(docs);
-    // });
+    }); */
+
+    setUser({...querySnapshot.data()});
   };
 
   useEffect(() => {
-    getProfiles();
+    getUserProfile();
   }, []);
   return (
     <>
+    <Navbar />
     <h1 className="text-5xl text-center p-5">Fetched data from Firestore</h1>
     <div>
-      {users.map((user) => (
-          <div className="col-md-4" key={user.id}>
-            <WebsiteCard link={user.username} />
-          </div>
-        ))}
+      {
+        user && user.username
+      }
     </div>
     </>
 
